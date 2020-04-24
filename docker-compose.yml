@@ -1,0 +1,77 @@
+version: '3'
+
+      
+
+    
+    
+services:
+
+  mysqlbook:
+
+  
+    image: epridiacontainerregistry.azurecr.io/mysql:latest
+    container_name: mysqlbook
+
+#    networks:
+#      - default
+    
+#    volumes:
+#      - my_volume11:/var/lib/mysql  
+
+    environment:
+
+      MYSQL_DATABASE: book
+
+      MYSQL_ROOT_PASSWORD: root
+
+      MYSQL_ROOT_HOST: '%'
+      
+    
+   
+    ports:
+
+      - "3306:3306"
+      
+      
+
+  book:
+
+    restart: on-failure
+    image: epridiacontainerregistry.azurecr.io/books_book:latest
+  
+    build: 
+      context: .
+      dockerfile: DockerFile
+   
+
+    ports:
+
+      - "3001:3001"
+      
+    
+
+    environment:
+
+#      WAIT_HOSTS: mysql:3306
+      url: jdbc:mysql://mysqlbook:3306/book
+
+    depends_on:
+
+      - mysqlbook
+    
+    
+#    networks:
+#      - default
+
+
+
+    
+#networks:
+#  default:
+#    external:
+#      name: nat
+#  
+    
+  
+    
+     
